@@ -2,12 +2,37 @@
 import {Link, useParams} from "react-router-dom";
 
 import useProductDetail from "../hook/useProductDetail.jsx";
+import {useState} from "react";
 
 
 export default function ProductDetail() {
 
     const {id} = useParams();
     let {productDetail} = useProductDetail(id);
+    // console.log(productDetail.category);
+    const [quantity, setQuantity] = useState(1);
+    // console.log(quantity);
+    const addToCart = () => {
+        let item = {
+            ...productDetail,
+            quantity: Number(quantity),
+        }
+        // console.log("item ", item);
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        // console.log(cart);
+
+        const productIndex = cart.findIndex((element) => element.id == id);
+        // console.log(productIndex);
+        if (productIndex > -1) {
+            cart[productIndex].quantity += item.quantity;
+        } else {
+            cart.push(item);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        console.log("cart ", cart);
+    }
+
+
 
     return (
         <div className="xl:px-32 sm:px-5 px-2">
@@ -252,12 +277,14 @@ export default function ProductDetail() {
                                 <input
                                     className="w-full border-black/10 border-2 rounded-full py-3 pl-5"
                                     type="number"
-                                    value="1"
+                                    value={quantity}
+                                    onChange={(event) => {setQuantity(event.target.value)}}
                                 />
                             </div>
                         </div>
                         <button
                             className="w-full h-full disabled:opacity-45 disabled:cursor-not-allowed text-white bg-primary rounded-full py-4 font-bold mt-3"
+                            onClick={addToCart}
                         >
                             Add to Cart
                         </button>
