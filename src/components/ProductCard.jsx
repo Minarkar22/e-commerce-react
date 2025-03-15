@@ -6,7 +6,7 @@ export default function ProductCards({product}) {
 
     return (
         <div className="cursor-pointer">
-            <Link to="/productDetail">
+            <Link to={`/products/${product.id}`}>
                 <div
                     className="w-full h-auto bg-[#F7F8F9] group rounded-xl overflow-hidden"
                 >
