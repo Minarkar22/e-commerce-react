@@ -1,9 +1,11 @@
 import {Link, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import axios from "axios";
+import {AuthContext} from "../context/AuthContext.jsx";
 
 
 export default function Register() {
+    const {getUserInfo} = useContext(AuthContext);
     const [form, setForm] = useState({
         name : "",
         email : "",
@@ -23,8 +25,9 @@ export default function Register() {
          console.log(response);
          if (response.status === 201){
              const token = response.data.token;
-             console.log(token);
+             // console.log(token);
              localStorage.setItem("token", token);
+             getUserInfo(token)
              navigate("/");
          }
      } catch(e){
