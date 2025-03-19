@@ -1,11 +1,29 @@
 import {Link} from "react-router-dom";
 import useProducts from "../../hook/useProducts.jsx";
+import axios from "axios";
 
 
 export default function ProductLists() {
-    let {products} = useProducts();
+    let {products, setProducts} = useProducts();
     // console.log("productLists", products);
 
+    let deleteProduct = async (id) => {
+        try{
+            let response = await axios.delete(`http://localhost:8000/api/products/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            });
+            if(response.status === 200){
+                setProducts(prev => {
+                    return prev.filter(product => product.id !== id);
+                })
+                alert("Successfully deleted product");
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
     return (
         <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-gray-50">
             <div
@@ -96,8 +114,8 @@ export default function ProductLists() {
                                             <div
                                                 className="space-x-3 flex items-center min-w-[200px] w-auto max-w-[500px]"
                                             >
-                                                <a
-                                                    href=""
+                                                <Link
+                                                    to={`/admin/products/${product.id}/edit`}
                                                     className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-primary hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
                                                 >
                                                     <svg
@@ -112,9 +130,10 @@ export default function ProductLists() {
                                                         />
                                                     </svg>
                                                     Edit
-                                                </a>
-                                                <a
-                                                    href=""
+                                                </Link>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {deleteProduct(product.id)}}
                                                     className="text-sm px-4 flex items-center gap-3 shadow-md py-3 text-white bg-red-500 hover:bg-blue-900 font-semibold rounded-md transition-all active:animate-press"
                                                 >
                                                     <svg
@@ -129,7 +148,7 @@ export default function ProductLists() {
                                                         />
                                                     </svg>
                                                     Delete
-                                                </a>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

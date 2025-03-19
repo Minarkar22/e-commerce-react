@@ -7,6 +7,7 @@ import Login from "../pages/Login.jsx";
 import ProductLists from "../pages/admin/ProductLists.jsx";
 import AdminLayout from "../components/AdminLayout.jsx";
 import ProductCreate from "../pages/admin/ProductCreate.jsx";
+import ProductEdit from "../pages/admin/ProductEdit.jsx";
 
 
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: "/admin/create",
                 element: <ProductCreate />,
+            },
+            {
+                path: "/admin/products/:id/edit",
+                element: <ProductEdit />,
             }
         ]
     }
